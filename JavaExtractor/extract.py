@@ -28,7 +28,9 @@ def ExtractFeaturesForDir(args, dir, prefix):
     command = ['java', '-cp', args.jar, 'JavaExtractor.App',
                '--max_path_length', str(args.max_path_length), '--max_path_width', str(args.max_path_width),
                '--dir', dir, '--num_threads', str(args.num_threads)]
-
+    if args.ref_filename:
+        command += ['--ref_filename']
+        
     # print command
     # os.system(command)
     kill = lambda process: process.kill()
@@ -84,6 +86,7 @@ if __name__ == '__main__':
     parser.add_argument("-j", "--jar", dest="jar", required=True)
     parser.add_argument("-dir", "--dir", dest="dir", required=False)
     parser.add_argument("-file", "--file", dest="file", required=False)
+    parser.add_argument("-ref_filename", "--ref_filename", dest="ref_filename", required=False, default=False)
     args = parser.parse_args()
 
     if args.file is not None:
