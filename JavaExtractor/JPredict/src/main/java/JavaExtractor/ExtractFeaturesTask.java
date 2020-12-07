@@ -81,9 +81,12 @@ public class ExtractFeaturesTask implements Callable<Void> {
 			if (m_CommandLineValues.PrettyPrint) {
 				toPrint = toPrint.replace(" ", "\n\t");
 			}
-			builder.append(toPrint);
-			
 
+			if (m_CommandLineValues.RefFilename) {
+				builder.append(this.filePath.toString() + ' ' + toPrint);
+			} else {
+				builder.append(toPrint);
+			}
 			methodsOutputs.add(builder.toString());
 
 		}

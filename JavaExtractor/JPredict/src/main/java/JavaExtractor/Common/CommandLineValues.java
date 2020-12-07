@@ -39,6 +39,9 @@ public class CommandLineValues {
 	@Option(name = "--max_child_id", required = false)
 	public int MaxChildId = Integer.MAX_VALUE;
 
+	@Option(name = "--ref_filename", required = false)
+	public boolean RefFilename = false;
+
 	public CommandLineValues(String... args) throws CmdLineException {
 		CmdLineParser parser = new CmdLineParser(this);
 		try {
