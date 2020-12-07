@@ -30,11 +30,6 @@ def ExtractFeaturesForDir(args, dir, prefix):
                '--dir', dir, '--num_threads', str(args.num_threads)]
     if args.ref_filename:
         command += ['--ref_filename']
-<<<<<<< HEAD
-
-=======
-        
->>>>>>> cea736b03f3ab1f112f93e18cc31a8fa39470a63
     # print command
     # os.system(command)
     kill = lambda process: process.kill()
