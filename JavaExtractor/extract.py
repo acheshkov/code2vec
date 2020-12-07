@@ -30,7 +30,11 @@ def ExtractFeaturesForDir(args, dir, prefix):
                '--dir', dir, '--num_threads', str(args.num_threads)]
     if args.ref_filename:
         command += ['--ref_filename']
+<<<<<<< HEAD
 
+=======
+        
+>>>>>>> cea736b03f3ab1f112f93e18cc31a8fa39470a63
     # print command
     # os.system(command)
     kill = lambda process: process.kill()
@@ -87,6 +91,7 @@ if __name__ == '__main__':
     parser.add_argument("-dir", "--dir", dest="dir", required=False)
     parser.add_argument("-file", "--file", dest="file", required=False)
     parser.add_argument("-ref_filename", "--ref_filename", action="store_true", dest="ref_filename", required=False, default=False)
+
     args = parser.parse_args()
 
     if args.file is not None:
