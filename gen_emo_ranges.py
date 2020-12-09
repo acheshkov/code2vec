@@ -57,7 +57,7 @@ if __name__ == '__main__':
         required=False,
     )
 
-    parser.add_argument("-threads", "--num_threads", dest="num_threads", required=False, default=1)
+    parser.add_argument("-threads", "--num_threads", dest="num_threads", required=False, default=1, type=int)
     parser.add_argument("-n", "--n", dest="n", required=False, default=10)
     args = parser.parse_args()
     start = time.time()
