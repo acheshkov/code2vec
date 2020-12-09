@@ -71,7 +71,7 @@ if __name__ == '__main__':
     if args.dir is not None:
          files = list(map(lambda ts: (os.path.join(args.dir, ts[0]), ) + ts[1: ] , files))
     data = []
-    pool = mp.Pool(mp.cpu_count())
+    pool = mp.Pool(args.num_threads)
     data = pool.starmap(process_single_file, files)
     data = list(filter(lambda v: v is not None, data))
     pd.DataFrame(data, columns=['file_name', 'class_name', 'method_name', 'ranges']).to_csv(args.output_csv)
