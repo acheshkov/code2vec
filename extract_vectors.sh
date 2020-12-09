@@ -19,23 +19,24 @@ PYTHON=python3
 # VAL_DATA_FILE=${DATASET_NAME}.val.raw.txt
 # TEST_DATA_FILE=${DATASET_NAME}.test.raw.txt
 
-JAVA_FILES=./data/full_dataset/output_files/
+JAVA_FILES=./emos
 FILE1=fn_paths.txt
 FILE2=fn.txt
 FILE3=paths.txt
 FILE4=filtered_paths.txt
 FILE5=${FILE4}.vectors
 FILE6=method_vectors.csv
-EXTRACTOR_JAR=JavaExtractor/JPredict/target/JavaExtractor-0.0.1-SNAPSHOT.jar
-DICT_PATH=/tmp/Downloads/java14m.dict.c2v/data/java14m/java14m.dict.c2v
-MODEL_PATH=models/java14_model/saved_model_iter8.release
+EXTRACTOR_JAR=../code2vec/JavaExtractor/JPredict/target/JavaExtractor-0.0.1-SNAPSHOT.jar
+DICT_PATH=/hdd/code2vec/java14m/java14m.dict.c2v
+MODEL_PATH=/hdd/code2vec/code2vec/models/java14_model/saved_model_iter8.release
+EXTRACT_SCRIPT=../code2vec/JavaExtractor/extract.py
 
 
 rm ${FILE1} ${FILE2} ${FILE3} ${FILE4} FILE5
 
 
 echo "Extracting paths for each file in the directory"
-${PYTHON} JavaExtractor/extract.py --jar ${EXTRACTOR_JAR} --dir ${JAVA_FILES} --ref_filename > ${FILE1}
+${PYTHON} ${EXTRACT_SCRIPT} --jar ${EXTRACTOR_JAR} --dir ${JAVA_FILES} --ref_filename --num_threads 2 > ${FILE1}
 cat ${FILE1} | cut -d' ' -f1  > ${FILE2}
 cat ${FILE1} | cut -d' ' -f2- > ${FILE3}
 echo "Filter contexts"
