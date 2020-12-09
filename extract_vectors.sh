@@ -32,7 +32,7 @@ MODEL_PATH=/hdd/code2vec/code2vec/models/java14_model/saved_model_iter8.release
 EXTRACT_SCRIPT=../code2vec/JavaExtractor/extract.py
 
 
-rm ${FILE1} ${FILE2} ${FILE3} ${FILE4} FILE5
+rm ${FILE1} ${FILE2} ${FILE3} ${FILE4} ${FILE5}
 
 
 echo "Extracting paths for each file in the directory"
@@ -43,7 +43,7 @@ echo "Filter contexts"
 ${PYTHON} filter_contexts.py -i ${FILE3} -o ${FILE4} -dp ${DICT_PATH}
 ${PYTHON} code2vec.py --load ${MODEL_PATH} --test ${FILE4} --export_code_vectors
 paste -d',' ${FILE2} filtered_paths.txt > FILE6
-#rm ${FILE1} ${FILE2} ${FILE3} ${FILE4}
+#rm ${FILE1} ${FILE2} ${FILE3} ${FILE4} ${FILE5}
 
 # python3 filter_contexts.py  -i paths.txt -o path_filterd.txt -dp /tmp/Downloads/java14m.dict.c2v/data/java14m/java14m.dict.c2v
 # python3 ../code2vec/code2vec.py --load /hdd/code2vec/code2vec/models/java14_model/saved_model_iter8.release --test paths_filtered.txt --export_code_vectors
