@@ -56,7 +56,6 @@ def filter_context(
     for method_name, contexts in methods:
         if len(contexts) > max_contexts:
             context_parts = [c.split(',') for c in contexts]
-            full_found_contexts, partial_found_contexts = get_c
             full_found_contexts = [
                 c for i, c in enumerate(contexts)
                 if context_full_found(context_parts[i], word_to_count, path_to_count)

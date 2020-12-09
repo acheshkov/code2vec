@@ -47,13 +47,4 @@ def find_emos(filename: str, class_name: str, method_name: str) -> List[Range]:
       last_statement = extraction_opportunity[-1]
       range = complement_range(source_code, Range(first_statement.line-1, last_statement.line-1))
       results.append(range)
-      #print(range.start, range.end)
-      #print(range)
-    #   range_ex = '\n'.join(source_code.split('\n')[range.start: range.end])
-    #   print(
-    #       f"{index}th extraction opportunity:\n"
-    #       f"\tFirst statement: {first_statement.node_type} on line {first_statement.line}\n"
-    #       f"\tLast statement: {last_statement.node_type} on line {last_statement.line}\n"
-    #       f"range: \n {range_ex} \n -----"
-    #  )
   return results
