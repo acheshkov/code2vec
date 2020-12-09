@@ -56,9 +56,16 @@ if __name__ == '__main__':
         metavar="FILE",
         required=False,
     )
-
     parser.add_argument("-threads", "--num_threads", dest="num_threads", required=False, default=1, type=int)
+    parser.add_argument("-chunks", "--chunks", dest="chunks", required=False, default=1000, type=int)
     parser.add_argument("-n", "--n", dest="n", required=False, default=10)
+
+    def chunks(lst, n):
+      """Yield successive n-sized chunks from lst."""
+      for i in range(0, len(lst), n):
+          yield lst[i: i + n]
+
+    
     args = parser.parse_args()
     start = time.time()
     columns_to_use = ['output_filename', 'project_name', 'class_name', 'method_where_invocation_occurred', 'start_line_of_function_where_invocation_occurred', 'can_be_parsed']
@@ -69,9 +76,15 @@ if __name__ == '__main__':
     files = list(map(tuple, files))
     
     if args.dir is not None:
-         files = list(map(lambda ts: (os.path.join(args.dir, ts[0]), ) + ts[1: ] , files))
+         files = list(map(lambda ts: (os.path.join(args.dir, ts[0]), ) + ts[1: ], files))
     data = []
     pool = mp.Pool(args.num_threads)
-    data = pool.starmap(process_single_file, files)
-    data = list(filter(lambda v: v is not None, data))
-    pd.DataFrame(data, columns=['file_name', 'class_name', 'method_name', 'ranges']).to_csv(args.output_csv)
+    
+    for ch in chunks(files, args.chunks):
+      data = []
+      data = pool.starmap(process_single_file, ch)
+      data = list(filter(lambda v: v is not None, data))
+      pd.DataFrame(
+        data, 
+        columns=['file_name', 'class_name', 'method_name', 'ranges']
+      ).to_csv(args.output_csv, header=False, mode='a', index=False)
