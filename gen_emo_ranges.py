@@ -21,7 +21,7 @@ def get_method_loc(filename: str, method_name: str, method_start_line: int) -> i
   method_code = extract_method(source_code, method_name, method_start_line)
   return len(method_code.split('\n'))
 
-def process_single_file(filename, class_name, method_name, method_start_line, ins_start, ins_end, method_loc_limit=300):
+def process_single_file(filename, class_name, method_name, method_start_line, ins_start, ins_end, method_loc_limit=50):
   try:
     if count_all_class_declarations(filename) > 1:
       print('File must contain only one class', filename, class_name, method_name, method_start_line, ins_start, ins_end)
