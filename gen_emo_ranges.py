@@ -65,6 +65,8 @@ if __name__ == '__main__':
         required=False,
     )
     parser.add_argument("-threads", "--num_threads", dest="num_threads", required=False, default=1, type=int)
+    parser.add_argument("-method_loc_limit", "--method_loc_limit", dest="method_loc_limit", required=False, default=300, type=int)
+    
     parser.add_argument("-chunks", "--chunks", dest="chunks", required=False, default=1000, type=int)
     parser.add_argument("-n", "--n", dest="n", required=False, default=10)
 
@@ -93,7 +95,10 @@ if __name__ == '__main__':
     files = list(map(tuple, files))
     
     if args.dir is not None:
-         files = list(map(lambda ts: (os.path.join(args.dir, ts[0]), ) + ts[1: ], files))
+      files = list(map(lambda ts: (os.path.join(args.dir, ts[0]), ) + ts[1: ], files))
+    if args.method_loc_limit is not None:
+      files = list(map(lambda ts: ts + (args.method_loc_limit, ), files))
+    
     data = []
     pool = mp.Pool(args.num_threads)
     
