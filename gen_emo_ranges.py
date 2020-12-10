@@ -12,7 +12,7 @@ import tempfile
 from typing import List, Tuple, Dict, Optional
 from enum import Enum, auto
 from utils import extract_method, get_source_code
-from find_emos import find_emos
+from find_emos import find_emos, count_all_class_declarations
 
 
 
@@ -21,10 +21,18 @@ def get_method_loc(filename: str, method_name: str, method_start_line: int) -> i
   method_code = extract_method(source_code, method_name, method_start_line)
   return len(method_code.split('\n'))
 
-def process_single_file(filename, class_name, method_name, method_start_line, method_loc_limit=300):
+def process_single_file(filename, class_name, method_name, method_start_line, ins_start, ins_end, method_loc_limit=300):
   try:
-    if get_method_loc(filename, method_name, method_start_line) >= method_loc_limit: 
+    if count_all_class_declarations(filename) > 1:
+      print('File must contain only one class', filename, class_name, method_name, method_start_line, ins_start, ins_end)
       return None
+    loc = get_method_loc(filename, method_name, method_start_line)
+    if loc >= method_loc_limit: 
+      return None
+    if not (ins_start > method_start_line and  ins_end < method_start_line + loc):
+      print('Insertion out of range method declaration', filename, class_name, method_name, method_start_line, ins_start, ins_end)
+      return None
+    print(filename)
     ranges = find_emos(filename, class_name, method_name)
     ranges = list(filter(lambda v: v.end - v.start > 1, ranges))
     
@@ -68,11 +76,20 @@ if __name__ == '__main__':
     
     args = parser.parse_args()
     start = time.time()
-    columns_to_use = ['output_filename', 'project_name', 'class_name', 'method_where_invocation_occurred', 'start_line_of_function_where_invocation_occurred', 'can_be_parsed']
+    columns_to_use = [
+      'output_filename', 'project_name', 
+      'class_name', 'method_where_invocation_occurred', 
+      'start_line_of_function_where_invocation_occurred', 'can_be_parsed',
+      'inline_insertion_line_start', 'inline_insertion_line_end'
+    ]
     files = pd.read_csv(args.input_csv)
     files = files[files.can_be_parsed == True]
     files.start_line_of_function_where_invocation_occurred = files.start_line_of_function_where_invocation_occurred.astype(int)
-    files = files[columns_to_use][['output_filename', 'class_name', 'method_where_invocation_occurred', 'start_line_of_function_where_invocation_occurred']].values.tolist()
+    files = files[columns_to_use][[
+      'output_filename', 'class_name', 'method_where_invocation_occurred', 
+      'start_line_of_function_where_invocation_occurred',
+      'inline_insertion_line_start', 'inline_insertion_line_end'
+    ]].values.tolist()
     files = list(map(tuple, files))
     
     if args.dir is not None:
