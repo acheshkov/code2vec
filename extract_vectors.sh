@@ -27,11 +27,11 @@ FILE4=filtered_paths.txt
 FILE5=${FILE4}.vectors
 FILE6=method_vectors.csv
 EXTRACTOR_JAR=../code2vec/JavaExtractor/JPredict/target/JavaExtractor-0.0.1-SNAPSHOT.jar
-DICT_PATH=/hdd/code2vec/java14m/java14m.dict.c2v
+DICT_PATH=/hdd/code2vec/data/java14m/java14m.dict.c2v
 MODEL_PATH=/hdd/code2vec/code2vec/models/java14_model/saved_model_iter8.release
 EXTRACT_SCRIPT=../code2vec/JavaExtractor/extract.py
-FILTER_SCRIPT=../code2vec/JavaExtractor/filter_contexts.py
-CODE2VEC_SCRIPT=../code2vec/JavaExtractor/filter_contexts.py
+FILTER_SCRIPT=../code2vec/filter_contexts.py
+CODE2VEC_SCRIPT=../code2vec/filter_contexts.py
 
 
 rm ${FILE1} ${FILE2} ${FILE3} ${FILE4} ${FILE5}
