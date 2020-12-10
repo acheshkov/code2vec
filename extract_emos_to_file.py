@@ -23,11 +23,12 @@ if __name__ == '__main__':
     args = parser.parse_args()
 
     files = pd.read_csv(args.input_csv).values.tolist()
-    for filename, class_name, method_name, ranges_str in files:
+    for i, (filename, class_name, method_name, ranges_str) in enumerate(files):
         ranges = eval(ranges_str)
         for [start, end] in ranges: 
             rng = Range(start, end)
             out_fn = gen_emo_filename(os.path.basename(filename), method_name, rng)
             out_fn = os.path.join(args.out_dir, out_fn)
             extract_lines_range_to_file(filename, out_fn, rng)
+        if i % 100 == 0: print(f'{i} files are processed')
 
