@@ -30,6 +30,8 @@ EXTRACTOR_JAR=../code2vec/JavaExtractor/JPredict/target/JavaExtractor-0.0.1-SNAP
 DICT_PATH=/hdd/code2vec/java14m/java14m.dict.c2v
 MODEL_PATH=/hdd/code2vec/code2vec/models/java14_model/saved_model_iter8.release
 EXTRACT_SCRIPT=../code2vec/JavaExtractor/extract.py
+FILTER_SCRIPT=../code2vec/JavaExtractor/filter_contexts.py
+CODE2VEC_SCRIPT=../code2vec/JavaExtractor/filter_contexts.py
 
 
 rm ${FILE1} ${FILE2} ${FILE3} ${FILE4} ${FILE5}
@@ -40,8 +42,8 @@ ${PYTHON} ${EXTRACT_SCRIPT} --jar ${EXTRACTOR_JAR} --dir ${JAVA_FILES} --ref_fil
 cat ${FILE1} | cut -d' ' -f1  > ${FILE2}
 cat ${FILE1} | cut -d' ' -f2- > ${FILE3}
 echo "Filter contexts"
-${PYTHON} filter_contexts.py -i ${FILE3} -o ${FILE4} -dp ${DICT_PATH}
-${PYTHON} code2vec.py --load ${MODEL_PATH} --test ${FILE4} --export_code_vectors
+${PYTHON} ${FILTER_SCRIPT} -i ${FILE3} -o ${FILE4} -dp ${DICT_PATH}
+${PYTHON} ${CODE2VEC_SCRIPT} --load ${MODEL_PATH} --test ${FILE4} --export_code_vectors
 paste -d',' ${FILE2} filtered_paths.txt > ${FILE6}
 #rm ${FILE1} ${FILE2} ${FILE3} ${FILE4} ${FILE5}
 
