@@ -31,7 +31,7 @@ DICT_PATH=/hdd/code2vec/data/java14m/java14m.dict.c2v
 MODEL_PATH=/hdd/code2vec/code2vec/models/java14_model/saved_model_iter8.release
 EXTRACT_SCRIPT=../code2vec/JavaExtractor/extract.py
 FILTER_SCRIPT=../code2vec/filter_contexts.py
-CODE2VEC_SCRIPT=../code2vec/filter_contexts.py
+CODE2VEC_SCRIPT=../code2vec/code2vec.py
 
 
 rm ${FILE1} ${FILE2} ${FILE3} ${FILE4} ${FILE5}
@@ -44,7 +44,7 @@ cat ${FILE1} | cut -d' ' -f2- > ${FILE3}
 echo "Filter contexts"
 ${PYTHON} ${FILTER_SCRIPT} -i ${FILE3} -o ${FILE4} -dp ${DICT_PATH}
 ${PYTHON} ${CODE2VEC_SCRIPT} --load ${MODEL_PATH} --test ${FILE4} --export_code_vectors
-paste -d',' ${FILE2} ${FILE4} > ${FILE6}
+paste -d',' ${FILE2} ${FILE5} > ${FILE6}
 #rm ${FILE1} ${FILE2} ${FILE3} ${FILE4} ${FILE5}
 
 # python3 filter_contexts.py  -i paths.txt -o path_filterd.txt -dp /tmp/Downloads/java14m.dict.c2v/data/java14m/java14m.dict.c2v
