@@ -32,9 +32,10 @@ def get_method_ast(filename: str, class_name: str, method_name: str) -> AST:
     return ast.get_subtree(method_declaration)
 
 
-def count_all_class_declarations(filename: str) -> int:
+def count_all_class_declarations(filename: str) -> Optional[int]:
   ast = AST.build_from_javalang(build_ast(str(filename)))
   return len(list(ast.get_proxy_nodes(ASTNodeType.CLASS_DECLARATION)))
+
 
 def find_emos(filename: str, class_name: str, method_name: str) -> List[Range]:
   ast_method = get_method_ast(filename, class_name, method_name)
@@ -51,4 +52,5 @@ def find_emos(filename: str, class_name: str, method_name: str) -> List[Range]:
       last_statement = extraction_opportunity[-1]
       range = complement_range(source_code, Range(first_statement.line-1, last_statement.line-1))
       results.append(range)
+
   return results

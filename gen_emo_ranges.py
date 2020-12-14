@@ -11,7 +11,7 @@ import pickle
 import tempfile
 from typing import List, Tuple, Dict, Optional
 from enum import Enum, auto
-from utils import extract_method, get_source_code
+from utils import extract_method, get_source_code, Range, complement_range
 from find_emos import find_emos, count_all_class_declarations
 
 
@@ -21,7 +21,13 @@ def get_method_loc(filename: str, method_name: str, method_start_line: int) -> i
   method_code = extract_method(source_code, method_name, method_start_line)
   return len(method_code.split('\n'))
 
+
 def process_single_file(filename, class_name, method_name, method_start_line, ins_start, ins_end, method_loc_limit=50):
+
+  def _complement(filename: str, range: Range) -> Range:
+    sc = get_source_code(filename)
+    return complement_range(sc,  Range(range.start, range.end))
+
   try:
     if count_all_class_declarations(filename) > 1:
       print('File must contain only one class', filename, class_name, method_name, method_start_line, ins_start, ins_end)
@@ -34,6 +40,7 @@ def process_single_file(filename, class_name, method_name, method_start_line, in
       return None
     print(filename)
     ranges = find_emos(filename, class_name, method_name)
+    ranges = [_complement(filename, r) for r in ranges]
     ranges = list(filter(lambda v: v.end - v.start > 1, ranges))
     
     return filename, class_name, method_name, str(ranges)

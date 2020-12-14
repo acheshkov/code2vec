@@ -4,6 +4,7 @@ from typing import List, Tuple, Dict, Optional
 SourceCode = str
 
 class Range:
+  ''' Line range from a to b includes a and b and start from zero'''
   def __init__(self, start: int, end: int = None):
     self._start = start
     self._end = end or start
@@ -23,6 +24,9 @@ class Range:
   def __str__(self):
     return f'[{self._start},{self._end}]'
 
+  def __eq__(self, other: 'Range'):
+    return self._start == other._start and self._end == other._end
+
   def contains(self, range: 'Range') -> bool:
     return self._start <= range.start and self._end >= range.end
 
@@ -36,25 +40,43 @@ def remove_comments(string: SourceCode) -> SourceCode:
             return match.group(1)
     return regex.sub(_replacer, string)
 
+def extract_lines_range_to_file(filename_in: str, filename_out: str, range: Range) -> None:
+  lines = extract_lines_range_from_file(filename_in, range)
+  write_lines_to_file(lines, filename_out)
+
+def extract_lines_range_from_file(filename: str, range: Range) -> List[str]:
+  source_code = get_source_code(filename)
+  return extract_lines_range_from_source_code(source_code, range)
+
+def extract_lines_range_from_source_code(code: SourceCode, range: Range) -> List[str]:
+  ''' Line Range from a to b includes a and b and start indexing from zero'''
+  return code.split('\n')[range.start: range.end + 1]
 
 def complement_range(class_source: SourceCode, line_range: Range) -> Range:
-  open_brackets = 0
+  open_brackets   = 0
   closed_brackets = 0
   n_line = 0
+  has_semicolon = False
   source_code_lines = class_source.split('\n')
   # assert remove_comments(source_code_lines[line_range.start]).count('}') == 0
 
   for n_line, line in enumerate(source_code_lines[line_range.start: ]):
-    
     line_without_comments = remove_comments(line)
+    has_semicolon = line_without_comments.count(';') > 0
     open_brackets += line_without_comments.count('{')
     closed_brackets += line_without_comments.count('}')
+ 
     if line_range.start + n_line < line_range.end: 
+      if open_brackets - closed_brackets == 0:
+        open_brackets   = 0
+        closed_brackets = 0
+      continue
+    if closed_brackets == 0 and open_brackets == 0 and not has_semicolon: 
       continue
     if open_brackets - closed_brackets == 0:
       break
   
-  result = Range(line_range.start, line_range.start + n_line + 1)
+  result = Range(line_range.start, line_range.start + n_line)
   #assert result.contains(line_range)
   return result
 
@@ -64,7 +86,7 @@ def extract_method(class_source: SourceCode, method_name: str, method_start_line
     range = complement_range(class_source, Range(method_start_line - 1))
   else:
      range = complement_range(class_source, Range(method_start_line - 1, method_start_line + 1))
-  method_lines = class_source.split('\n')[range.start: range.end]
+  method_lines = extract_lines_range_from_source_code(class_source, range)
   return '\n'.join(method_lines)
 
 
