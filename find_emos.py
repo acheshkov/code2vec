@@ -32,7 +32,7 @@ def get_method_ast(filename: str, class_name: str, method_name: str) -> AST:
     return ast.get_subtree(method_declaration)
 
 
-def count_all_class_declarations(filename: str) -> Optional[int]:
+def count_all_class_declarations(filename: str) -> int:
   ast = AST.build_from_javalang(build_ast(str(filename)))
   return len(list(ast.get_proxy_nodes(ASTNodeType.CLASS_DECLARATION)))
 
