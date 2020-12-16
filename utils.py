@@ -104,14 +104,3 @@ def write_lines_to_file(lines: List[str], filename: str) -> None:
   with open(filename, 'w') as f:
     for l in lines:
       f.write(l + '\n')
-
-def extract_lines_range_to_file(filename_in: str, filename_out: str, range: Range) -> None:
-  lines = extract_lines_range_from_file(filename_in, range)
-  write_lines_to_file(lines, filename_out)
-
-def extract_lines_range_from_file(filename: str, range: Range) -> List[str]:
-  source_code = get_source_code(filename)
-  return extract_lines_range_from_source_code(source_code, range)
-
-def extract_lines_range_from_source_code(code: SourceCode, range: Range) -> List[str]:
-  return code.split('\n')[range.start: range.end]
