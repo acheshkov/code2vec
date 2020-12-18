@@ -107,7 +107,7 @@ if __name__ == '__main__':
       files = list(map(lambda ts: ts + (args.method_loc_limit, ), files))
     
     data = []
-    pool = mp.Pool(args.num_threads, maxtasksperchild=1000)
+    pool = mp.Pool(args.num_threads, maxtasksperchild=100)
     
     for ch in chunks(files, args.chunks):
       data = []
