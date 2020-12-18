@@ -107,10 +107,11 @@ if __name__ == '__main__':
       files = list(map(lambda ts: ts + (args.method_loc_limit, ), files))
     
     data = []
-    pool = mp.Pool(args.num_threads, maxtasksperchild=100)
+    #pool = mp.Pool(args.num_threads, maxtasksperchild=100)
     
     for ch in chunks(files, args.chunks):
       data = []
+      pool = mp.Pool(args.num_threads)
       print(list(map(lambda v: os.path.basename(v[0]), ch)))
       data = pool.starmap(process_single_file, ch)
       data = list(filter(lambda v: v is not None, data))
@@ -118,3 +119,5 @@ if __name__ == '__main__':
         data, 
         columns=['file_name', 'class_name', 'method_name', 'ranges']
       ).to_csv(args.output_csv, header=False, mode='a', index=False)
+      pool.close()
+      pool.join()
