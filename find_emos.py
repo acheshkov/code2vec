@@ -16,7 +16,7 @@ from veniq.baselines.semi._common_types import (
                     )
 from veniq.utils.ast_builder import build_ast
 
-def get_method_ast(filename: str, class_name: str, method_name: str) -> AST:
+def get_method_ast(filename: str, class_name: str, method_name: str, method_decl_line: int) -> AST:
     ast = AST.build_from_javalang(build_ast(str(filename)))
 
     try:
@@ -25,7 +25,7 @@ def get_method_ast(filename: str, class_name: str, method_name: str) -> AST:
             for node in ast.get_root().types
             if node.node_type == ASTNodeType.CLASS_DECLARATION and node.name == class_name
         )
-        method_declaration = next(node for node in class_declaration.methods if node.name == method_name)
+        method_declaration = next(node for node in class_declaration.methods if node.name == method_name and node.line == method_decl_line)
     except StopIteration:
         raise RuntimeError(f"Failed to find method {method_name} in class {class_name} in file {filepath}")
 
@@ -37,8 +37,8 @@ def count_all_class_declarations(filename: str) -> int:
   return len(list(ast.get_proxy_nodes(ASTNodeType.CLASS_DECLARATION)))
 
 
-def find_emos(filename: str, class_name: str, method_name: str) -> List[Range]:
-  ast_method = get_method_ast(filename, class_name, method_name)
+def find_emos(filename: str, class_name: str, method_name: str, method_decl_line: int) -> List[Range]:
+  ast_method = get_method_ast(filename, class_name, method_name, method_decl_line)
   statements_semantic = extract_method_statements_semantic(ast_method)
   possible_extraction_opportunities = create_extraction_opportunities(statements_semantic)
   filtered_extraction_opportunities = filter_extraction_opportunities(

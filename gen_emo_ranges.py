@@ -29,9 +29,9 @@ def process_single_file(filename, class_name, method_name, method_start_line, in
     return complement_range(sc,  Range(range.start, range.end))
 
   try:
-    if count_all_class_declarations(filename) > 1:
-      print('File must contain only one class', filename, class_name, method_name, method_start_line, ins_start, ins_end)
-      return None
+    # if count_all_class_declarations(filename) > 1:
+    #   print('File must contain only one class', filename, class_name, method_name, method_start_line, ins_start, ins_end)
+    #   return None
     loc = get_method_loc(filename, method_name, method_start_line)
     if loc >= method_loc_limit: 
       return None
