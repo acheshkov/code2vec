@@ -38,7 +38,7 @@ def process_single_file(filename, class_name, method_name, method_start_line, in
     if not (ins_start > method_start_line and  ins_end < method_start_line + loc):
       print('Insertion out of range method declaration', filename, class_name, method_name, method_start_line, ins_start, ins_end)
       return None
-    print(filename)
+    #print(filename)
     ranges = find_emos(filename, class_name, method_name, method_start_line)
     ranges = [_complement(filename, r) for r in ranges]
     ranges = list(filter(lambda v: v.end - v.start > 1, ranges))
@@ -111,6 +111,7 @@ if __name__ == '__main__':
     
     for ch in chunks(files, args.chunks):
       data = []
+      print(ch)
       data = pool.starmap(process_single_file, ch)
       data = list(filter(lambda v: v is not None, data))
       pd.DataFrame(
