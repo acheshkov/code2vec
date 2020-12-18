@@ -111,7 +111,7 @@ if __name__ == '__main__':
     
     for ch in chunks(files, args.chunks):
       data = []
-      print(ch)
+      print(list(map(lambda v: v[0], ch)))
       data = pool.starmap(process_single_file, ch)
       data = list(filter(lambda v: v is not None, data))
       pd.DataFrame(
