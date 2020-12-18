@@ -19,7 +19,7 @@ PYTHON=python3
 # VAL_DATA_FILE=${DATASET_NAME}.val.raw.txt
 # TEST_DATA_FILE=${DATASET_NAME}.test.raw.txt
 
-JAVA_FILES=./emos
+JAVA_FILES=./emos_60
 FILE1=fn_paths.txt
 FILE2=fn.txt
 FILE3=paths.txt
