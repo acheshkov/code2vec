@@ -38,22 +38,19 @@ def count_all_class_declarations(filename: str) -> int:
 
 
 def find_emos(filename: str, class_name: str, method_name: str, method_decl_line: int) -> List[Range]:
-  try:
-    ast_method = get_method_ast(filename, class_name, method_name, method_decl_line)
-    statements_semantic = extract_method_statements_semantic(ast_method)
-    possible_extraction_opportunities = create_extraction_opportunities(statements_semantic)
-    filtered_extraction_opportunities = filter_extraction_opportunities(
-        possible_extraction_opportunities, statements_semantic, ast_method
-    )
+  ast_method = get_method_ast(filename, class_name, method_name, method_decl_line)
+  statements_semantic = extract_method_statements_semantic(ast_method)
+  possible_extraction_opportunities = create_extraction_opportunities(statements_semantic)
+  filtered_extraction_opportunities = filter_extraction_opportunities(
+      possible_extraction_opportunities, statements_semantic, ast_method
+  )
 
-    source_code = get_source_code(filename)
-    results = []
-    for index, extraction_opportunity in enumerate(filtered_extraction_opportunities):
-        first_statement = extraction_opportunity[0]
-        last_statement = extraction_opportunity[-1]
-        range = complement_range(source_code, Range(first_statement.line-1, last_statement.line-1))
-        results.append(range)
+  source_code = get_source_code(filename)
+  results = []
+  for index, extraction_opportunity in enumerate(filtered_extraction_opportunities):
+      first_statement = extraction_opportunity[0]
+      last_statement = extraction_opportunity[-1]
+      range = complement_range(source_code, Range(first_statement.line-1, last_statement.line-1))
+      results.append(range)
 
-    return results
-  except:
-    return []
+  return results
