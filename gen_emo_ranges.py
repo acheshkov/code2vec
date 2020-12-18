@@ -40,6 +40,7 @@ def process_single_file(filename, class_name, method_name, method_start_line, in
       return None
     print(filename)
     ranges = find_emos(filename, class_name, method_name, method_start_line)
+    if len(ranges) == 0: return None
     ranges = [_complement(filename, r) for r in ranges]
     ranges = list(filter(lambda v: v.end - v.start > 1, ranges))
     
